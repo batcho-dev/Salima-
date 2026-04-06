@@ -25,13 +25,26 @@ public class Subscription {
     private UUID id;
 
     @Enumerated(EnumType.STRING)
-    private Plan plan;
+    @Column(nullable = false)
+    private Plan planName;
 
+    @Column(nullable = false)
     private BigDecimal monthlyPayment;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private SubscriptionStatus subscriptionStatus;
     private int waitingPeriodInDays;
-    private int claim_limit_per_year;
+    private BigDecimal claimLimit;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    private LocalDateTime nextBillingDate;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private int paymentRetryCount = 0;
+
+    private LocalDateTime cancelledAt;
 
     @OneToMany(mappedBy = "subscription")
     private List<Claim> claims;
@@ -42,4 +55,7 @@ public class Subscription {
 
     @OneToMany(mappedBy = "subscription")
     private List<Payment> payments;
+
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 }
