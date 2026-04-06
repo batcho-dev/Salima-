@@ -22,10 +22,10 @@ public class FileController {
     private final FileService fileService;
 
     @PostMapping(
-            value = "/upload/profile-picture",
+            value = "/upload",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE
     )
-    public ResponseEntity<Map<String, String>> uploadProfilePicture(
+    public ResponseEntity<Map<String, String>> uploadFile(
             @RequestParam("file") MultipartFile file,
             @AuthenticationPrincipal User currentUser
     ) {

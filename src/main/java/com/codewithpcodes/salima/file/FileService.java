@@ -12,8 +12,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -24,22 +22,21 @@ public class FileService {
     @Value("${application.file.uploads.media-output-path}")
     private String fileUploadPath;
 
-    private static final List<String> ALLOWED_EXTENSIONS = Arrays.asList("jpg", "jpeg", "png", "webp");
-    private static final int MAX_FILE_SIZE = 1024 * 1024 * 2;
+    private static final int MAX_FILE_SIZE = 1024 * 1024 * 5;
 
     public String saveProfilePicture(
             @Nonnull MultipartFile sourceFile,
             @Nonnull UUID userId
     ) {
         // Validate
-        validateImageFile(sourceFile);
+        validateFile(sourceFile);
 
         //store under users/{userId}/
         final String subPath = "users" + File.separator + userId;
         return uploadFile(sourceFile, subPath);
     }
 
-    private void validateImageFile(MultipartFile sourceFile) {
+    private void validateFile(MultipartFile sourceFile) {
         if (sourceFile.isEmpty()) {
             throw new IllegalArgumentException("File is empty");
         }
@@ -51,9 +48,6 @@ public class FileService {
         String extension = getFileExtension(sourceFile.getOriginalFilename())
                 .replace(".", "");
 
-        if (!ALLOWED_EXTENSIONS.contains(extension)) {
-            throw new IllegalArgumentException("File type is not supported");
-        }
     }
 
     private String uploadFile(
@@ -74,11 +68,11 @@ public class FileService {
         Path targetPath = Paths.get(targetFilePath);
         try {
             Files.write(targetPath, sourceFile.getBytes());
-            log.info("ProfilePicture saved to {}", targetPath);
+            log.info("File saved to {}", targetPath);
             return targetFilePath;
         } catch (IOException e) {
             log.error("File was not saved: {}", e.getMessage());
-            throw new RuntimeException("Failed to save Profile Picture: ", e);
+            throw new RuntimeException("Failed to save File: ", e);
         }
     }
 
