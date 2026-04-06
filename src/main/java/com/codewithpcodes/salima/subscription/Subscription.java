@@ -35,7 +35,13 @@ public class Subscription {
     @Column(nullable = false)
     private SubscriptionStatus subscriptionStatus;
     private int waitingPeriodInDays;
+
+    @Column(nullable = false)
     private BigDecimal claimLimit;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private BigDecimal claimedAmountThisMonth = BigDecimal.ZERO;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private LocalDateTime nextBillingDate;
