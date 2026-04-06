@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Salima — Claims History</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --teal: #0D9488;
+  --teal-dark: #0F766E;
+  --teal-light: #14B8A6;
+  --teal-bg: #F0FDFA;
+  --ink: #0F172A;
+  --slate: #475569;
+  --slate-light: #94A3B8;
+  --green: #10B981;
+  --amber: #F59E0B;
+  --red: #EF4444;
+  --border: #E2E8F0;
+  --card: #FFFFFF;
+  --radius: 12px;
+  --radius-lg: 16px;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #F8FAFC;
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+/* LAYOUT WITH RIGHT SIDEBAR */
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* MAIN CONTENT */
+.main-content {
+  flex: 1;
+  margin-left: 280px;
+  padding: 24px 32px;
+  max-width: calc(100% - 280px);
+}
+
+/* RIGHT SIDEBAR NAVIGATION */
+.sidebar-nav {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 280px;
+  height: 100vh;
+  background: var(--card);
+  border-right: 1px solid var(--border);
+  padding: 32px 20px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.03);
+  z-index: 100;
+}
+
+.sidebar-logo {
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.sidebar-logo .logo {
+  font-family: 'Sora', sans-serif;
+  font-weight: 800;
+  font-size: 24px;
+  letter-spacing: -1px;
+  color: var(--ink);
+  text-decoration: none;
+}
+.sidebar-logo .logo span { color: var(--teal); }
+
+.sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 32px;
+  padding: 12px;
+  background: #F8FAFC;
+  border-radius: var(--radius-lg);
+}
+.sidebar-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--teal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: white;
+  font-size: 18px;
+}
+.sidebar-user-info h4 {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+.sidebar-user-info p {
+  font-size: 11px;
+  color: var(--slate);
+}
+
+.sidebar-nav-links {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  color: var(--slate);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.nav-link:hover {
+  background: var(--teal-bg);
+  color: var(--teal);
+}
+.nav-link.active {
+  background: var(--teal);
+  color: white;
+}
+.nav-icon {
+  font-size: 20px;
+  width: 24px;
+  text-align: center;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+.signout-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  color: var(--red);
+  background: rgba(239, 68, 68, 0.08);
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.signout-btn:hover {
+  background: rgba(239, 68, 68, 0.15);
+}
+
+/* History page specific styles */
+.page-header {
+  margin-bottom: 28px;
+}
+.page-header h1 {
+  font-family: 'Sora', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin-bottom: 4px;
+}
+.page-header p {
+  font-size: 14px;
+  color: var(--slate);
+}
+
+.filter-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  overflow-x: auto;
+}
+.filter-tabs::-webkit-scrollbar { display: none; }
+.ftab {
+  flex-shrink: 0;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--slate);
+  transition: all 0.2s;
+}
+.ftab.active {
+  background: var(--teal);
+  color: white;
+  border-color: var(--teal);
+}
+.ftab:hover:not(.active) {
+  border-color: var(--teal);
+  color: var(--teal);
+}
+
+.summary-strip {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+.scard {
+  flex: 1;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.scard-val {
+  font-family: 'Sora', sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+.scard-lbl {
+  font-size: 10px;
+  color: var(--slate);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.claims-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.claim-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.claim-item:hover {
+  border-color: var(--teal);
+  box-shadow: var(--shadow);
+}
+.ci-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+.ci-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.ci-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius);
+  background: var(--teal-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+.ci-name {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+.ci-provider {
+  font-size: 12px;
+  color: var(--slate);
+}
+.ci-amount {
+  font-family: 'Sora', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: right;
+}
+.ci-date {
+  font-size: 11px;
+  color: var(--slate);
+  text-align: right;
+  margin-top: 2px;
+}
+.ci-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.ci-ref {
+  font-size: 11px;
+  color: var(--slate-light);
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+.badge-green { background: rgba(16, 185, 129, 0.1); color: var(--green); }
+.badge-amber { background: rgba(245, 158, 11, 0.1); color: var(--amber); }
+.badge-red { background: rgba(239, 68, 68, 0.1); color: var(--red); }
+
+.month-header {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--slate-light);
+  margin: 24px 0 12px;
+}
+.month-header:first-child { margin-top: 0; }
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+}
+.empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+.empty-state p {
+  color: var(--slate);
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .sidebar-nav { width: 240px; }
+  .main-content {
+    margin-right: 240px;
+    max-width: calc(100% - 240px);
+    padding: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .sidebar-nav {
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+  }
+  .sidebar-nav.open {
+    transform: translateX(0);
+  }
+  .main-content {
+    margin-right: 0;
+    max-width: 100%;
+  }
+  .summary-strip { flex-direction: column; gap: 8px; }
+  .ci-top { flex-direction: column; gap: 8px; }
+  .ci-amount { text-align: left; }
+  .ci-date { text-align: left; }
+}
+</style>
+</head>
+<body>
+<div class="app-layout">
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <div class="page-header">
+      <h1>Claim History</h1>
+      <p>Track all your submitted claims and payouts</p>
+    </div>
+
+    <div class="filter-tabs">
+      <button class="ftab active" onclick="filterClaims('all',this)">All</button>
+      <button class="ftab" onclick="filterClaims('approved',this)">Approved</button>
+      <button class="ftab" onclick="filterClaims('pending',this)">Pending</button>
+      <button class="ftab" onclick="filterClaims('rejected',this)">Rejected</button>
+    </div>
+
+    <div class="summary-strip">
+      <div class="scard"><div class="scard-val text-teal" id="totClaims">0</div><div class="scard-lbl">Total Claims</div></div>
+      <div class="scard"><div class="scard-val text-green" id="totPaid">0</div><div class="scard-lbl">FCFA Received</div></div>
+      <div class="scard"><div class="scard-val text-amber" id="totPending">0</div><div class="scard-lbl">Pending</div></div>
+    </div>
+
+    <div id="claimsContainer"></div>
+  </main>
+
+  <!-- RIGHT SIDEBAR NAVIGATION -->
+  <aside class="sidebar-nav">
+    <div class="sidebar-logo">
+      <div class="logo">Sali<span>ma</span></div>
+    </div>
+
+    <div class="sidebar-user">
+      <div class="sidebar-avatar" id="sidebarAvatar">AJ</div>
+      <div class="sidebar-user-info">
+        <h4 id="sidebarName">Ajuyo</h4>
+        <p id="sidebarPlan">Premium Plan</p>
+      </div>
+    </div>
+
+    <div class="sidebar-nav-links">
+      <a href="dashboard.html" class="nav-link">
+        <span class="nav-icon">🏠</span>
+        <span>Dashboard</span>
+      </a>
+      <a href="claim.html" class="nav-link">
+        <span class="nav-icon">➕</span>
+        <span>File a Claim</span>
+      </a>
+      <a href="history.html" class="nav-link active">
+        <span class="nav-icon">📋</span>
+        <span>Claim History</span>
+      </a>
+      <a href="profile.html" class="nav-link">
+        <span class="nav-icon">👤</span>
+        <span>My Profile</span>
+      </a>
+    </div>
+
+    <div class="sidebar-footer">
+      <button class="signout-btn" onclick="logout()">
+        <span class="nav-icon">🚪</span>
+        <span>Sign Out</span>
+      </button>
+    </div>
+  </aside>
+</div>
+
+<script>
+function loadUserData() {
+  let user = null;
+  try {
+    user = JSON.parse(localStorage.getItem('salima_user'));
+  } catch(e) {}
+  
+  if (!user) {
+    user = {
+      name: localStorage.getItem('salima_member') || 'Ajuyo',
+      phone: localStorage.getItem('salima_phone') || '677123456',
+      plan: localStorage.getItem('salima_plan') || 'premium'
+    };
+  }
+  
+  const initials = user.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+  document.getElementById('sidebarAvatar').textContent = initials;
+  document.getElementById('sidebarName').textContent = user.name;
+  
+  const planData = {
+    basic: 'Basic', standard: 'Standard', premium: 'Premium'
+  };
+  document.getElementById('sidebarPlan').textContent = (planData[user.plan] || 'Premium') + ' Plan';
+}
+
+function loadClaims() {
+  const stored = localStorage.getItem('salima_claims');
+  let claims = stored ? JSON.parse(stored) : [];
+  
+  if (claims.length === 0) {
+    claims = [
+      { id: 'SLM-2026-00489', category: 'Consultation', provider: 'Clinique Bali', amount: 8000, payout: 8000, date: '2026-04-02T10:00:00Z', status: 'pending' },
+      { id: 'SLM-2026-00471', category: 'Pharmacy', provider: 'Pharmacie Centrale', amount: 12500, payout: 12500, date: '2026-03-28T14:30:00Z', status: 'approved' },
+      { id: 'SLM-2026-00445', category: 'Laboratory', provider: 'Hôpital Central', amount: 6800, payout: 6800, date: '2026-03-15T09:15:00Z', status: 'approved' },
+      { id: 'SLM-2026-00412', category: 'Hospital', provider: 'Clinique des Palmiers', amount: 22000, payout: 22000, date: '2026-03-03T11:00:00Z', status: 'approved' },
+      { id: 'SLM-2026-00388', category: 'Pharmacy', provider: 'Pharmacie du Marché', amount: 3200, payout: 0, date: '2026-02-18T16:45:00Z', status: 'rejected' }
+    ];
+    localStorage.setItem('salima_claims', JSON.stringify(claims));
+  }
+  
+  const totalClaims = claims.length;
+  const totalPaid = claims.filter(c => c.status === 'approved').reduce((sum, c) => sum + (c.payout || c.amount), 0);
+  const totalPending = claims.filter(c => c.status === 'pending').length;
+  
+  document.getElementById('totClaims').textContent = totalClaims;
+  document.getElementById('totPaid').textContent = totalPaid.toLocaleString();
+  document.getElementById('totPending').textContent = totalPending;
+  
+  const grouped = {};
+  claims.forEach(claim => {
+    const date = new Date(claim.date);
+    const monthYear = date.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+    if (!grouped[monthYear]) grouped[monthYear] = [];
+    grouped[monthYear].push(claim);
+  });
+  
+  const container = document.getElementById('claimsContainer');
+  container.innerHTML = '';
+  
+  if (Object.keys(grouped).length === 0) {
+    container.innerHTML = `<div class="empty-state"><div class="empty-icon">📋</div><p>No claims yet</p><p style="font-size:12px; margin-top:8px;">File your first claim to get started</p></div>`;
+    return;
+  }
+  
+  Object.keys(grouped).forEach(month => {
+    const monthDiv = document.createElement('div');
+    monthDiv.innerHTML = `<div class="month-header">${month}</div><div class="claims-list" id="claims-${month.replace(/\s/g, '')}"></div>`;
+    container.appendChild(monthDiv);
+    const listDiv = monthDiv.querySelector('.claims-list');
+    
+    grouped[month].forEach(claim => {
+      const date = new Date(claim.date);
+      const statusClass = claim.status === 'approved' ? 'badge-green' : (claim.status === 'pending' ? 'badge-amber' : 'badge-red');
+      const statusText = claim.status.charAt(0).toUpperCase() + claim.status.slice(1);
+      const amountClass = claim.status === 'approved' ? 'text-green' : (claim.status === 'pending' ? 'text-amber' : 'text-muted');
+      const sign = claim.status === 'approved' ? '+' : '';
+      const icon = claim.category === 'Pharmacy' ? '💊' : (claim.category === 'Hospital' ? '🏥' : (claim.category === 'Laboratory' ? '🔬' : '👨‍⚕️'));
+      
+      listDiv.innerHTML += `
+        <div class="claim-item" data-status="${claim.status}">
+          <div class="ci-top">
+            <div class="ci-left">
+              <div class="ci-icon">${icon}</div>
+              <div>
+                <div class="ci-name">${claim.category}</div>
+                <div class="ci-provider">${claim.provider || 'Medical service'}</div>
+              </div>
+            </div>
+            <div>
+              <div class="ci-amount ${amountClass}">${sign}${claim.amount.toLocaleString()} FCFA</div>
+              <div class="ci-date">${date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
+            </div>
+          </div>
+          <div class="ci-bottom">
+            <span class="ci-ref">${claim.id}</span>
+            <span class="badge ${statusClass}">${statusText}</span>
+          </div>
+        </div>
+      `;
+    });
+  });
+}
+
+function filterClaims(status, btn) {
+  document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  
+  document.querySelectorAll('.claim-item').forEach(item => {
+    item.style.display = (status === 'all' || item.dataset.status === status) ? 'block' : 'none';
+  });
+  
+  document.querySelectorAll('.month-header').forEach(header => {
+    const next = header.nextElementSibling;
+    const hasVisible = next && Array.from(next.children).some(child => child.style.display !== 'none');
+    header.style.display = hasVisible ? 'block' : 'none';
+  });
+}
+
+function logout() {
+  localStorage.removeItem('salima_user');
+  localStorage.removeItem('salima_member');
+  localStorage.removeItem('salima_plan');
+  window.location.href = 'index.html';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadUserData();
+  loadClaims();
+});
+</script>
+</body>
+</html>

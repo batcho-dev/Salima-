@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Salima — Join Today</title>
+<link rel="stylesheet" href="style.css"/>
+<style>
+/* Page-specific styles with proper contrast */
+body { background: linear-gradient(135deg, #f0fdfa 0%, #e6f7f3 100%); }
+
+.ob-card {
+  background: #ffffff;
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(13, 148, 136, 0.15);
+  padding: 44px 40px;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.1);
+}
+
+/* Override dark theme for onboarding */
+.step-dot { background: rgba(13, 148, 136, 0.2); }
+.step-dot.active, .step-dot.done { background: #0D9488; }
+
+.text-teal { color: #0D9488; }
+.text-muted { color: #64748B; }
+
+.name-input {
+  width: 100%;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 14px 16px;
+  color: #0F172A;
+  font-size: 16px;
+  transition: all 0.2s;
+}
+.name-input:focus {
+  outline: none;
+  border-color: #0D9488;
+  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
+}
+.name-input::placeholder { color: #94A3B8; }
+
+.phone-wrap {
+  display: flex;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+.phone-wrap:focus-within {
+  border-color: #0D9488;
+  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
+}
+.phone-prefix {
+  background: #F0FDFA;
+  padding: 14px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #0D9488;
+  border-right: 1px solid #e2e8f0;
+}
+.phone-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  padding: 14px 16px;
+  background: #ffffff;
+  color: #0F172A;
+}
+.phone-input::placeholder { color: #94A3B8; }
+
+.hint-box {
+  background: #F0FDFA;
+  border: 1px solid rgba(13, 148, 136, 0.2);
+  border-radius: 12px;
+  padding: 13px 16px;
+  font-size: 12px;
+  color: #0D9488;
+  display: flex;
+  gap: 9px;
+  margin: 16px 0;
+}
+
+.otp-box {
+  width: 52px;
+  height: 60px;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  color: #0F172A;
+  outline: none;
+  transition: all 0.2s;
+}
+.otp-box:focus {
+  border-color: #0D9488;
+  background: #F0FDFA;
+  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
+}
+
+.plans-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.plan-row {
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 18px 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  gap: 14px;
+  background: #ffffff;
+}
+.plan-row:hover {
+  border-color: #0D9488;
+  background: #F0FDFA;
+}
+.plan-row.selected {
+  border-color: #0D9488;
+  background: #F0FDFA;
+}
+.plan-radio {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #cbd5e1;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.plan-row.selected .plan-radio {
+  border-color: #0D9488;
+  background: #0D9488;
+}
+.plan-radio-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ffffff;
+  opacity: 0;
+}
+.plan-row.selected .plan-radio-dot { opacity: 1; }
+.plan-row-name {
+  font-family: 'Sora', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #0F172A;
+}
+.plan-row-price {
+  font-size: 13px;
+  color: #64748B;
+}
+.plan-row-desc {
+  font-size: 12px;
+  color: #64748B;
+}
+.plan-pop-badge {
+  background: #F59E0B;
+  color: #0F172A;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  padding: 3px 8px;
+  border-radius: 10px;
+}
+.resend-row { text-align: center; font-size: 13px; color: #64748B; margin-top: 20px; }
+#resend-btn span { color: #0D9488; cursor: pointer; }
+
+.btn-primary {
+  background: #0D9488;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.25s;
+}
+.btn-primary:hover {
+  background: #0F766E;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(13, 148, 136, 0.3);
+}
+.btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+</style>
+</head>
+<body>
+<div class="page" style="background: linear-gradient(135deg, #f0fdfa 0%, #e6f7f3 100%); min-height: 100vh;">
+  <nav class="nav" style="background: rgba(255,255,255,0.95); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(13,148,136,0.1);">
+    <div class="nav-logo" style="color: #0F172A;">Sali<span style="color:#0D9488">ma</span></div>
+    <a href="index.html" style="color:#64748B; font-size:13px; text-decoration:none;">← Back</a>
+  </nav>
+
+  <div class="page-content" style="display:flex; justify-content:center; padding-top:48px;">
+    <div class="ob-card">
+      <!-- Progress bar -->
+      <div class="step-dots" style="display:flex; gap:6px; margin-bottom:36px">
+        <div class="step-dot active" id="seg1"></div>
+        <div class="step-dot" id="seg2"></div>
+        <div class="step-dot" id="seg3"></div>
+        <div class="step-dot" id="seg4"></div>
+      </div>
+
+      <!-- STEP 1: Name -->
+      <div class="step-panel active" id="panel1">
+        <div class="text-sm" style="color:#0D9488; font-weight:700; letter-spacing:2px; text-transform:uppercase; margin-bottom:8px;">Step 1 of 4</div>
+        <h2 style="font-family:'Sora',sans-serif; font-size:24px; font-weight:800; margin-bottom:6px; color:#0F172A;">What's your name?</h2>
+        <p style="font-size:14px; color:#64748B; margin-bottom:32px;">As it appears on your ID.</p>
+        <input type="text" id="fullname" class="name-input" placeholder="Marie Kouam" autocomplete="name"/>
+        <button class="btn-primary mt-4" id="btn1" disabled onclick="goStep(2)">Continue →</button>
+      </div>
+
+      <!-- STEP 2: Phone -->
+      <div class="step-panel" id="panel2" style="display:none">
+        <div class="text-sm" style="color:#0D9488; font-weight:700; letter-spacing:2px; text-transform:uppercase; margin-bottom:8px;">Step 2 of 4</div>
+        <h2 style="font-family:'Sora',sans-serif; font-size:24px; font-weight:800; margin-bottom:6px; color:#0F172A;">Enter Your Number</h2>
+        <p style="font-size:14px; color:#64748B; margin-bottom:32px;">We'll send a code to verify your identity.</p>
+        <div style="font-size:11px; font-weight:700; letter-spacing:1.5px; color:#64748B; margin-bottom:8px;">Phone Number</div>
+        <div class="phone-wrap">
+          <div class="phone-prefix">🇨🇲 +237</div>
+          <input class="phone-input" type="tel" id="phone" placeholder="6XX XXX XXX" maxlength="9"/>
+        </div>
+        <div class="hint-box">🔒 Used for MoMo payouts. Never shared.</div>
+        <button class="btn-primary" id="btn2" disabled onclick="sendOTP()">Send OTP Code →</button>
+      </div>
+
+      <!-- STEP 3: OTP -->
+      <div class="step-panel" id="panel3" style="display:none">
+        <div class="text-sm" style="color:#0D9488; font-weight:700; letter-spacing:2px; text-transform:uppercase; margin-bottom:8px;">Step 3 of 4</div>
+        <h2 style="font-family:'Sora',sans-serif; font-size:24px; font-weight:800; margin-bottom:6px; color:#0F172A;">Verify Your Code</h2>
+        <p style="font-size:14px; color:#64748B; margin-bottom:32px;">Enter the 6-digit code sent to your number.</p>
+        <div class="otp-grid" id="otp-container" style="display:flex; gap:10px; justify-content:center; margin:8px 0;"></div>
+        <div class="resend-row">Didn't receive it? <span id="resend-btn">Resend in <span id="countdown">0:45</span></span></div>
+        <div id="otp-error" style="color:#EF4444; text-align:center; margin-top:12px; display:none;"></div>
+        <button class="btn-primary mt-4" id="btn3" disabled onclick="verifyOTP()">Verify Code →</button>
+      </div>
+
+      <!-- STEP 4: Plan -->
+      <div class="step-panel" id="panel4" style="display:none">
+        <div class="text-sm" style="color:#0D9488; font-weight:700; letter-spacing:2px; text-transform:uppercase; margin-bottom:8px;">Step 4 of 4</div>
+        <h2 style="font-family:'Sora',sans-serif; font-size:24px; font-weight:800; margin-bottom:6px; color:#0F172A;">Choose Your Plan</h2>
+        <p style="font-size:14px; color:#64748B; margin-bottom:32px;">24h MoMo payouts. Cancel anytime.</p>
+        <div class="plans-stack">
+          <div class="plan-row" data-plan="basic" onclick="selectPlan('basic',this)">
+            <div class="plan-radio"><div class="plan-radio-dot"></div></div>
+            <div class="plan-info">
+              <div class="plan-head" style="display:flex; align-items:center; gap:10px; margin-bottom:4px; flex-wrap:wrap;">
+                <span class="plan-row-name">Basic</span>
+                <span class="plan-row-price">2,500 FCFA/mo</span>
+              </div>
+              <div class="plan-row-desc">Pharmacy + consultations · Up to 25K per claim</div>
+            </div>
+          </div>
+          <div class="plan-row selected" data-plan="standard" onclick="selectPlan('standard',this)">
+            <div class="plan-radio"><div class="plan-radio-dot"></div></div>
+            <div class="plan-info">
+              <div class="plan-head" style="display:flex; align-items:center; gap:10px; margin-bottom:4px; flex-wrap:wrap;">
+                <span class="plan-row-name">Standard</span>
+                <span class="plan-pop-badge">Popular</span>
+                <span class="plan-row-price">5,000 FCFA/mo</span>
+              </div>
+              <div class="plan-row-desc">Full coverage incl. lab & hospital · Up to 200K</div>
+            </div>
+          </div>
+          <div class="plan-row" data-plan="premium" onclick="selectPlan('premium',this)">
+            <div class="plan-radio"><div class="plan-radio-dot"></div></div>
+            <div class="plan-info">
+              <div class="plan-head" style="display:flex; align-items:center; gap:10px; margin-bottom:4px; flex-wrap:wrap;">
+                <span class="plan-row-name">Premium</span>
+                <span class="plan-row-price">9,000 FCFA/mo</span>
+              </div>
+              <div class="plan-row-desc">Unlimited coverage · Hospital, surgery & everything</div>
+            </div>
+          </div>
+        </div>
+        <button class="btn-primary" onclick="completePlan()">Activate My Coverage →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let selectedPlanId = 'standard';
+let countdownInterval = null;
+let generatedOTP = '123456';
+let currentStep = 1;
+
+function generateOTPBoxes() {
+  const container = document.getElementById('otp-container');
+  if (!container) return;
+  container.innerHTML = '';
+  for (let i = 0; i < 6; i++) {
+    const input = document.createElement('input');
+    input.type = 'tel';
+    input.maxLength = 1;
+    input.className = 'otp-box';
+    input.setAttribute('data-otp-index', i);
+    input.addEventListener('input', (e) => otpInput(e, i));
+    input.addEventListener('keydown', (e) => otpKeydown(e, i));
+    container.appendChild(input);
+  }
+}
+
+function otpInput(e, i) {
+  const val = e.target.value.replace(/\D/g, '');
+  e.target.value = val.slice(-1);
+  const boxes = document.querySelectorAll('.otp-box');
+  if (val && i < 5) boxes[i + 1].focus();
+  checkOTPComplete();
+}
+
+function otpKeydown(e, i) {
+  const boxes = document.querySelectorAll('.otp-box');
+  if (e.key === 'Backspace' && !e.target.value && i > 0) {
+    boxes[i - 1].focus();
+  }
+}
+
+function checkOTPComplete() {
+  const boxes = document.querySelectorAll('.otp-box');
+  const filled = Array.from(boxes).every(b => b.value !== '');
+  document.getElementById('btn3').disabled = !filled;
+  if (filled) {
+    const entered = Array.from(boxes).map(b => b.value).join('');
+    const isValid = entered === generatedOTP;
+    if (isValid) {
+      document.getElementById('btn3').disabled = false;
+      document.getElementById('otp-error').style.display = 'none';
+    } else {
+      document.getElementById('btn3').disabled = true;
+      document.getElementById('otp-error').textContent = 'Incorrect code. Try 123456';
+      document.getElementById('otp-error').style.display = 'block';
+    }
+  }
+}
+
+function verifyOTP() {
+  const boxes = document.querySelectorAll('.otp-box');
+  const entered = Array.from(boxes).map(b => b.value).join('');
+  if (entered === generatedOTP) {
+    goStep(4);
+  } else {
+    alert('Invalid OTP code. Try 123456');
+  }
+}
+
+function sendOTP() {
+  const phone = document.getElementById('phone').value;
+  if (phone.length < 9) {
+    alert('Enter complete phone number');
+    return;
+  }
+  generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+  console.log('OTP sent:', generatedOTP);
+  alert(`Demo: Your OTP code is ${generatedOTP}`);
+  goStep(3);
+}
+
+function checkPhone(el) {
+  document.getElementById('btn2').disabled = el.value.length < 9;
+}
+
+function checkName(el) {
+  document.getElementById('btn1').disabled = el.value.trim().length < 2;
+}
+
+function goStep(n) {
+  document.querySelectorAll('.step-panel').forEach((p, i) => {
+    p.style.display = i === n - 1 ? 'block' : 'none';
+  });
+  for (let i = 1; i <= 4; i++) {
+    const seg = document.getElementById('seg' + i);
+    if (seg) {
+      seg.classList.toggle('active', i <= n);
+      seg.classList.toggle('done', i < n);
+    }
+  }
+  currentStep = n;
+  if (n === 3) {
+    setTimeout(() => {
+      const boxes = document.querySelectorAll('.otp-box');
+      if (boxes[0]) boxes[0].focus();
+    }, 100);
+    startCountdown();
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function startCountdown() {
+  let secs = 45;
+  clearInterval(countdownInterval);
+  const countdownSpan = document.getElementById('countdown');
+  const resendBtn = document.getElementById('resend-btn');
+  if (!countdownSpan) return;
+  countdownSpan.textContent = '0:' + secs;
+  countdownInterval = setInterval(() => {
+    secs--;
+    if (secs <= 0) {
+      clearInterval(countdownInterval);
+      resendBtn.innerHTML = '<span style="color:#0D9488;text-decoration:underline;cursor:pointer">Resend Code</span>';
+      resendBtn.onclick = () => sendOTP();
+    } else {
+      countdownSpan.textContent = '0:' + (secs < 10 ? '0' : '') + secs;
+    }
+  }, 1000);
+}
+
+function selectPlan(id, el) {
+  selectedPlanId = id;
+  document.querySelectorAll('.plan-row').forEach(r => r.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function completePlan() {
+  const userName = document.getElementById('fullname').value.trim();
+  const phone = document.getElementById('phone').value;
+  
+  if (!userName) {
+    alert('Please enter your name');
+    return;
+  }
+  
+  const userData = {
+    name: userName,
+    phone: '+237' + phone,
+    plan: selectedPlanId,
+    joinedAt: new Date().toISOString(),
+    memberSince: new Date().toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })
+  };
+  
+  localStorage.setItem('salima_user', JSON.stringify(userData));
+  localStorage.setItem('salima_plan', selectedPlanId);
+  localStorage.setItem('salima_member', userName);
+  localStorage.setItem('salima_phone', phone);
+  
+  window.location.href = 'dashboard.html';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  generateOTPBoxes();
+  const nameInput = document.getElementById('fullname');
+  if (nameInput) {
+    nameInput.addEventListener('input', (e) => checkName(e.target));
+  }
+  const phoneInput = document.getElementById('phone');
+  if (phoneInput) {
+    phoneInput.addEventListener('input', (e) => checkPhone(e.target));
+  }
+});
+</script>
+</body>
+</html>

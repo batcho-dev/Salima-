@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Salima — Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --teal: #0D9488;
+  --teal-dark: #0F766E;
+  --teal-light: #14B8A6;
+  --teal-bg: #F0FDFA;
+  --ink: #0F172A;
+  --slate: #475569;
+  --slate-light: #94A3B8;
+  --green: #10B981;
+  --amber: #F59E0B;
+  --red: #EF4444;
+  --blue: #3B82F6;
+  --border: #E2E8F0;
+  --card: #FFFFFF;
+  --radius: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #F8FAFC;
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+/* LAYOUT WITH RIGHT SIDEBAR */
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* MAIN CONTENT */
+.main-content {
+  flex: 1;
+  margin-left: 280px;
+  padding: 24px 32px;
+  max-width: calc(100% - 280px);
+}
+
+/* RIGHT SIDEBAR NAVIGATION */
+.sidebar-nav {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 280px;
+  height: 100vh;
+  background: var(--card);
+  border-left: 1px solid var(--border);
+  padding: 32px 20px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.03);
+  z-index: 100;
+}
+
+/* Logo in sidebar */
+.sidebar-logo {
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.sidebar-logo .logo {
+  font-family: 'Sora', sans-serif;
+  font-weight: 800;
+  font-size: 24px;
+  letter-spacing: -1px;
+  color: var(--ink);
+  text-decoration: none;
+}
+.sidebar-logo .logo span { color: var(--teal); }
+
+/* User section in sidebar */
+.sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 32px;
+  padding: 12px;
+  background: #F8FAFC;
+  border-radius: var(--radius-lg);
+}
+.sidebar-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--teal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: white;
+  font-size: 18px;
+}
+.sidebar-user-info h4 {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+.sidebar-user-info p {
+  font-size: 11px;
+  color: var(--slate);
+}
+
+/* Navigation links */
+.sidebar-nav-links {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  color: var(--slate);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.nav-link:hover {
+  background: var(--teal-bg);
+  color: var(--teal);
+}
+.nav-link.active {
+  background: var(--teal);
+  color: white;
+}
+.nav-link.active .nav-icon {
+  color: white;
+}
+.nav-icon {
+  font-size: 20px;
+  width: 24px;
+  text-align: center;
+}
+
+/* Sign out button */
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+.signout-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  color: var(--red);
+  background: rgba(239, 68, 68, 0.08);
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.signout-btn:hover {
+  background: rgba(239, 68, 68, 0.15);
+}
+
+/* Profile page specific styles */
+.profile-header {
+  text-align: center;
+  padding: 20px 20px 0;
+}
+.avatar-large {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--teal), var(--teal-light));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Sora', sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  margin: 0 auto 16px;
+  border: 3px solid rgba(13, 148, 136, 0.2);
+  color: white;
+}
+.profile-name {
+  font-family: 'Sora', sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+.profile-phone {
+  font-size: 14px;
+  color: var(--slate);
+  margin-bottom: 16px;
+}
+.profile-badges {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+.badge-green { background: rgba(16, 185, 129, 0.1); color: var(--green); }
+.badge-teal { background: rgba(13, 148, 136, 0.1); color: var(--teal); }
+.badge-blue { background: rgba(59, 130, 246, 0.1); color: var(--blue); }
+
+.plan-display {
+  background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+}
+.plan-display-name {
+  font-family: 'Sora', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.plan-display-sub { font-size: 12px; opacity: 0.8; }
+.plan-price-val {
+  font-family: 'Sora', sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+}
+.plan-price-lbl { font-size: 11px; opacity: 0.8; }
+
+.settings-section { margin-bottom: 24px; }
+.settings-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--slate-light);
+  margin-bottom: 12px;
+}
+.settings-list {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.setting-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.2s;
+}
+.setting-item:last-child { border-bottom: none; }
+.setting-item:hover { background: #F8FAFC; }
+.set-left { display: flex; align-items: center; gap: 14px; }
+.set-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius);
+  background: var(--teal-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+.set-name { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+.set-sub { font-size: 11px; color: var(--slate); }
+.set-val { font-size: 12px; color: var(--teal); font-weight: 600; }
+.set-arrow { color: var(--slate-light); font-size: 18px; }
+
+.toggle {
+  position: relative;
+  width: 44px;
+  height: 24px;
+}
+.toggle input { opacity: 0; width: 0; height: 0; }
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background: #CBD5E1;
+  border-radius: 24px;
+  transition: 0.3s;
+}
+.toggle-slider:before {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: 3px;
+  bottom: 3px;
+  background: white;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+input:checked + .toggle-slider { background: var(--teal); }
+input:checked + .toggle-slider:before { transform: translateX(20px); }
+
+.version-note {
+  text-align: center;
+  font-size: 11px;
+  color: var(--slate-light);
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar-nav {
+    width: 240px;
+  }
+  .main-content {
+    margin-right: 240px;
+    max-width: calc(100% - 240px);
+    padding: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .sidebar-nav {
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    box-shadow: none;
+  }
+  .sidebar-nav.open {
+    transform: translateX(0);
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+  }
+  .main-content {
+    margin-right: 0;
+    max-width: 100%;
+  }
+  .menu-toggle {
+    display: fixed;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--teal);
+    color: white;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 101;
+    box-shadow: var(--shadow-md);
+  }
+}
+</style>
+</head>
+<body>
+<div class="app-layout">
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <div class="profile-header">
+      <div class="avatar-large" id="avatarLarge">MK</div>
+      <div class="profile-name" id="profileName">Marie Kamga</div>
+      <div class="profile-phone" id="profilePhone">+237 677 123 456</div>
+      <div class="profile-badges">
+        <span class="badge badge-green">Active Member</span>
+        <span class="badge badge-teal" id="planBadge">Premium Plan</span>
+        <span class="badge badge-blue" id="sinceBadge">Since Jan 2026</span>
+      </div>
+    </div>
+
+    <div class="plan-display">
+      <div>
+        <div class="plan-display-name" id="planDisplayName">Premium Plan</div>
+        <div class="plan-display-sub" id="renewalText">Renews May 6, 2026</div>
+      </div>
+      <div class="plan-display-price">
+        <div class="plan-price-val" id="planPrice">9,000</div>
+        <div class="plan-price-lbl">FCFA / month</div>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <div class="settings-label">Account</div>
+      <div class="settings-list">
+        <div class="setting-item">
+          <div class="set-left">
+            <div class="set-icon">👤</div>
+            <div><div class="set-name">Personal Information</div><div class="set-sub">Name, ID, date of birth</div></div>
+          </div>
+          <span class="set-arrow">›</span>
+        </div>
+        <div class="setting-item">
+          <div class="set-left">
+            <div class="set-icon">📱</div>
+            <div><div class="set-name">Mobile Money</div><div class="set-sub" id="momNumber">MTN MoMo · +237 677 123 456</div></div>
+          </div>
+          <span class="set-arrow">›</span>
+        </div>
+        <div class="setting-item">
+          <div class="set-left">
+            <div class="set-icon">🔒</div>
+            <div><div class="set-name">Security & PIN</div><div class="set-sub">Change PIN or enable biometrics</div></div>
+          </div>
+          <span class="set-arrow">›</span>
+        </div>
+        <div class="setting-item">
+          <div class="set-left">
+            <div class="set-icon">📋</div>
+            <div><div class="set-name">Change Plan</div><div class="set-sub">Upgrade or downgrade coverage</div></div>
+          </div>
+          <span class="set-val" id="currentPlanVal">Premium</span>
+          <span class="set-arrow">›</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <div class="settings-label">Notifications</div>
+      <div class="settings-list">
+        <div class="setting-item">
+          <div class="set-left">
+            <div class="set-icon">📲</div>
+            <div><div class="set-name">Claim Updates</div><div class="set-sub">Status changes and payouts</div></div>
+          </div>
+          <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+        </div>
+        <div class="setting-item">
+          <div class="set-left">
+            <div class="set-icon">💳</div>
+            <div><div class="set-name">Premium Reminders</div><div class="set-sub">Monthly renewal alerts</div></div>
+          </div>
+          <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+        </div>
+        <div class="setting-item">
+          <div class="set-left">
+            <div class="set-icon">📢</div>
+            <div><div class="set-name">Community Updates</div><div class="set-sub">Pool health and news</div></div>
+          </div>
+          <label class="toggle"><input type="checkbox"/><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <div class="settings-label">Support</div>
+      <div class="settings-list">
+        <div class="setting-item">
+          <div class="set-left"><div class="set-icon">❓</div><div><div class="set-name">Help Centre</div><div class="set-sub">FAQs and guides</div></div></div>
+          <span class="set-arrow">›</span>
+        </div>
+        <div class="setting-item">
+          <div class="set-left"><div class="set-icon">💬</div><div><div class="set-name">Chat with Support</div><div class="set-sub">Available 8am – 8pm</div></div></div>
+          <span class="set-arrow">›</span>
+        </div>
+        <div class="setting-item">
+          <div class="set-left"><div class="set-icon">⭐</div><div><div class="set-name">Rate Salima</div><div class="set-sub">Share your experience</div></div></div>
+          <span class="set-arrow">›</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="version-note">Salima v1.0.0 · Made in Cameroon 🇨🇲</div>
+  </main>
+
+  <!-- RIGHT SIDEBAR NAVIGATION -->
+  <aside class="sidebar-nav">
+    <div class="sidebar-logo">
+      <div class="logo">Sali<span>ma</span></div>
+    </div>
+
+    <div class="sidebar-user">
+      <div class="sidebar-avatar" id="sidebarAvatar">MK</div>
+      <div class="sidebar-user-info">
+        <h4 id="sidebarName">Marie Kamga</h4>
+        <p id="sidebarPlan">Premium Plan</p>
+      </div>
+    </div>
+
+    <div class="sidebar-nav-links">
+      <a href="dashboard.html" class="nav-link">
+        <span class="nav-icon">🏠</span>
+        <span>Dashboard</span>
+      </a>
+      <a href="claim.html" class="nav-link">
+        <span class="nav-icon">➕</span>
+        <span>File a Claim</span>
+      </a>
+      <a href="history.html" class="nav-link">
+        <span class="nav-icon">📋</span>
+        <span>Claim History</span>
+      </a>
+      <a href="profile.html" class="nav-link active">
+        <span class="nav-icon">👤</span>
+        <span>My Profile</span>
+      </a>
+    </div>
+
+    <div class="sidebar-footer">
+      <button class="signout-btn" onclick="logout()">
+        <span class="nav-icon">🚪</span>
+        <span>Sign Out</span>
+      </button>
+    </div>
+  </aside>
+</div>
+
+<script>
+const PLAN_DATA = {
+  basic: { price: 2500, limit: 25000, name: 'Basic' },
+  standard: { price: 5000, limit: 75000, name: 'Standard' },
+  premium: { price: 9000, limit: 200000, name: 'Premium' }
+};
+
+function loadProfile() {
+  let user = null;
+  try {
+    user = JSON.parse(localStorage.getItem('salima_user'));
+  } catch(e) {}
+  
+  if (!user) {
+    user = {
+      name: localStorage.getItem('salima_member') || 'Marie Kamga',
+      phone: localStorage.getItem('salima_phone') || '677123456',
+      plan: localStorage.getItem('salima_plan') || 'premium',
+      memberSince: 'January 2026'
+    };
+  }
+  
+  const firstName = user.name.split(' ')[0];
+  const lastName = user.name.split(' ')[1] || '';
+  const initials = (firstName[0] + (lastName[0] || '')).toUpperCase();
+  const planName = PLAN_DATA[user.plan]?.name || 'Premium';
+  const planPrice = PLAN_DATA[user.plan]?.price || 9000;
+  
+  // Profile header
+  document.getElementById('avatarLarge').textContent = initials;
+  document.getElementById('profileName').textContent = user.name;
+  document.getElementById('profilePhone').textContent = '+237 ' + user.phone;
+  document.getElementById('planBadge').textContent = planName + ' Plan';
+  document.getElementById('planDisplayName').textContent = planName + ' Plan';
+  document.getElementById('planPrice').textContent = planPrice.toLocaleString();
+  document.getElementById('currentPlanVal').textContent = planName;
+  document.getElementById('momNumber').textContent = `MTN MoMo · +237 ${user.phone}`;
+  
+  // Sidebar
+  document.getElementById('sidebarAvatar').textContent = initials;
+  document.getElementById('sidebarName').textContent = user.name;
+  document.getElementById('sidebarPlan').textContent = planName + ' Plan';
+  
+  const joinDate = user.memberSince || 'January 2026';
+  document.getElementById('sinceBadge').textContent = `Since ${joinDate}`;
+  
+  const renewal = new Date();
+  renewal.setMonth(renewal.getMonth() + 1);
+  document.getElementById('renewalText').textContent = `Renews ${renewal.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}`;
+}
+
+function logout() {
+  localStorage.removeItem('salima_user');
+  localStorage.removeItem('salima_member');
+  localStorage.removeItem('salima_plan');
+  localStorage.removeItem('salima_phone');
+  window.location.href = 'index.html';
+}
+
+document.addEventListener('DOMContentLoaded', loadProfile);
+</script>
+</body>
+</html>
